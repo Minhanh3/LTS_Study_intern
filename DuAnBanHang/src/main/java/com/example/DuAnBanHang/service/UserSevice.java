@@ -1,6 +1,7 @@
 package com.example.DuAnBanHang.service;
 
 import com.example.DuAnBanHang.dto.request.UserCreateRequest;
+import com.example.DuAnBanHang.dto.request.UserUpdateRequest;
 import com.example.DuAnBanHang.dto.response.UserResponse;
 import com.example.DuAnBanHang.entity.User;
 import com.example.DuAnBanHang.dto.UserDto;
@@ -28,11 +29,11 @@ public class UserSevice implements IUserSevice {
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.mapToUser(userDto);
-        user.setAvatar("avatar trắng");
-        user.setCreateTime(LocalTime.now());
-        user.setDateOfBirth(LocalDate.now());
-        user.setActive(true);
-        user.setUpdateTime(LocalTime.now());
+//        user.setAvatar("avatar");
+//        user.setCreateTime(LocalTime.now());
+//        user.setDateOfBirth(LocalDate.now());
+//        user.setActive(true);
+//        user.setUpdateTime(LocalTime.now());
         User savedUser = userRepository.save(user);
 
         return UserMapper.mapToUserDto(savedUser);
@@ -56,6 +57,7 @@ public class UserSevice implements IUserSevice {
         return users.stream().map((user) -> UserMapper.mapToUserDto(user))
                 .collect(Collectors.toList());
     }
+
     public List<UserResponse> getAllUsersApi() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserResponse).toList();
@@ -67,24 +69,37 @@ public class UserSevice implements IUserSevice {
         return UserMapper.mapToUserDto(user);
     }
 
+    public UserResponse getUserByIdApi(int id) {
+        return userMapper.toUserResponse(userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User is not exist with given id: " + id)));
+
+    }
+
     @Override
     public UserDto updateUser(int id, UserDto userDto) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User is not exist with given id: " + id));
-        user.setPassword(userDto.getPassword());
-        user.setFullName(userDto.getFullName());
-        user.setDateOfBirth(userDto.getDateOfBirth());
-        user.setAvatar(userDto.getAvatar());
-        user.setEmail(userDto.getEmail());
-        user.setUpdateTime(LocalTime.now());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setActive(userDto.isActive());
+//        user.setPassword(userDto.getPassword());
+//        user.setFullName(userDto.getFullName());
+//        user.setDateOfBirth(userDto.getDateOfBirth());
+//        user.setAvatar(userDto.getAvatar());
+//        user.setEmail(userDto.getEmail());
+//        user.setUpdateTime(LocalTime.now());
+//        user.setPhoneNumber(userDto.getPhoneNumber());
+//        user.setActive(userDto.isActive());
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
+    }
+
+    public UserResponse updateUserApi(int id, UserUpdateRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User is not exist with given id: " + id));
+        user.setUpdateTime(LocalTime.now());
+        userMapper.updateUser(user, request);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
     public void deleteUser(int id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User is not exist with given id: " + id));
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(id);
     }
 }

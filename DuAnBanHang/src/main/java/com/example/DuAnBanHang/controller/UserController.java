@@ -2,6 +2,7 @@ package com.example.DuAnBanHang.controller;
 
 import com.example.DuAnBanHang.dto.UserDto;
 import com.example.DuAnBanHang.dto.request.UserCreateRequest;
+import com.example.DuAnBanHang.dto.request.UserUpdateRequest;
 import com.example.DuAnBanHang.dto.response.ApiResponse;
 import com.example.DuAnBanHang.dto.response.UserResponse;
 import com.example.DuAnBanHang.service.UserSevice;
@@ -9,8 +10,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,10 +24,10 @@ public class UserController {
 
     @GetMapping({"", "/"})
     public ApiResponse<List<UserResponse>> getAll() {
-//        List<UserDto> users = userSevice.getAllUsers();
+//        System.out.printf("hello");
         return ApiResponse.<List<UserResponse>>builder()
-                .result(userSevice.getAllUsersApi())
                 .code(200)
+                .result(userSevice.getAllUsersApi())
                 .build();
     }
 
@@ -42,21 +41,29 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable int id) {
-        UserDto userDto = userSevice.getUserById(id);
-        return ResponseEntity.ok(userDto);
+    public ApiResponse<UserResponse> getUserByid(@PathVariable int id) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userSevice.getUserByIdApi(id))
+                .code(200)
+                .build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable int id, @RequestBody UserDto userDto) {
-        UserDto updatedUser = userSevice.updateUser(id, userDto);
-        return ResponseEntity.ok(updatedUser);
+    public ApiResponse<UserResponse> updateUser(@PathVariable int id, @RequestBody UserUpdateRequest request) {
+//        UserDto updatedUser = userSevice.updateUser(id, userDto);
+        return ApiResponse.<UserResponse>builder()
+                .result(userSevice.updateUserApi(id, request))
+                .code(200)
+                .build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable int id) {
+    public ApiResponse<String> deleteUser(@PathVariable int id) {
         userSevice.deleteUser(id);
-        return ResponseEntity.ok("Deleted User");
+        return ApiResponse.<String>builder()
+                .result("delete oke")
+                .code(200)
+                .build();
     }
 
 }
