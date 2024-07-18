@@ -10,10 +10,11 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+//@CrossOrigin("*")
 @RestController
 @RequestMapping("user")
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping({"addUser", "/"})
+    @PostMapping({"addUser", ""})
     public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
 //        UserDto newUser = userSevice.createUser(userDto);
         return ApiResponse.<UserResponse>builder()
@@ -46,6 +47,20 @@ public class UserController {
                 .result(userSevice.getUserByIdApi(id))
                 .code(200)
                 .build();
+    }
+
+    @GetMapping("model/{id}")
+    public ApiResponse<UserResponse> getUserByidModel(@PathVariable int id) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userSevice.getUserByIdApiModel(id))
+                .code(200)
+                .build();
+    }
+
+    @GetMapping("model2/{id}")
+    public ResponseEntity<UserDto> getUserByidModel2(@PathVariable int id) {
+        UserDto userDto = userSevice.getUserByIdModel(id);
+        return ResponseEntity.ok(userDto);
     }
 
     @PutMapping("{id}")

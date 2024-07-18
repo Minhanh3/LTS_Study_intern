@@ -1,18 +1,21 @@
 package com.example.DuAnBanHang.service;
 
 import com.example.DuAnBanHang.dto.UserDto;
+import com.example.DuAnBanHang.dto.request.UserCreateRequest;
+import com.example.DuAnBanHang.dto.request.UserUpdateRequest;
+import com.example.DuAnBanHang.dto.response.UserResponse;
 
 import java.util.List;
 
 public interface IUserSevice  {
 
-    UserDto createUser(UserDto userDto);
+    UserResponse createUserApi(UserCreateRequest request);
 
-    List<UserDto> getAllUsers();
+    List<UserResponse> getAllUsersApi() ;
 
-    UserDto getUserById(int id);
+    UserResponse getUserByIdApi(int id);
 
-    UserDto updateUser(int id, UserDto userDto);
+    UserResponse updateUserApi(int id, UserUpdateRequest request);
 
     void deleteUser(int id);
 }
