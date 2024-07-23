@@ -81,4 +81,10 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/users")
+    public ApiResponse<List<UserResponse>> getUsersByFullName(@RequestParam String fullName) {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userSevice.getUsersByFullName(fullName))
+                .build();
+    }
 }
